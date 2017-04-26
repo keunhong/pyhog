@@ -1,7 +1,7 @@
 NUMPY=`python -c 'import numpy; print(numpy.get_include())'`
 PYROOT=`python -c 'import sys; print(sys.prefix)'`
 PYTHON_LIB=`python -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())"`
-CC=g++
+CC=clang++
 LIBS= 
 #FLAGS= -Wall -DNUMPYCHECK -fPIC
 #FLAGS = -Wall -DNDEBUG -O2 -ffast-math -pipe -msse -msse2 -mmmx -mfpmath=sse -fomit-frame-pointer 
@@ -12,10 +12,10 @@ FLAGS = -DNUMPYCHECK -DNDEBUG -O2 -ffast-math -msse2 -fPIC
 all: features_pedro_py.so
 
 features_pedro_py.so: features_pedro_py.o
-	g++ $^ -shared -o $@ $(LIBS)
+	$(CC) $^ -shared -o $@ $(LIBS)
 
 features_pedro_py.o: features_pedro_py.cc numpymacros.h
-	g++ -c $< $(FLAGS) -I$(NUMPY) -I$(PYTHON_LIB) -I../src/ -o $@
+	$(CC) -c $< $(FLAGS) -I$(NUMPY) -I$(PYTHON_LIB) -I../src/ -o $@
 
 .PHONY: clean
 clean:
